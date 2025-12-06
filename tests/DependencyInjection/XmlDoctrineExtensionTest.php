@@ -9,6 +9,8 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
+use function class_exists;
+
 #[IgnoreDeprecations]
 class XmlDoctrineExtensionTest extends AbstractDoctrineExtensionTestCase
 {
@@ -16,6 +18,10 @@ class XmlDoctrineExtensionTest extends AbstractDoctrineExtensionTestCase
         ContainerBuilder $container,
         string $file,
     ): void {
+        if (! class_exists(XmlFileLoader::class)) {
+            $this->markTestSkipped('Symfony 8 does not support XML based configuration anymore.');
+        }
+
         $loadXml = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Fixtures/config/xml'));
         $loadXml->import($file . '.{xml}');
     }

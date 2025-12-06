@@ -29,6 +29,11 @@ final class SymfonyApp extends Application
      */
     public function add(Command $command): Command
     {
+        /** @phpstan-ignore function.alreadyNarrowedType */
+        if (method_exists(parent::class, 'addCommand')) {
+            return parent::addCommand($command);
+        }
+
         return parent::add($command);
     }
 }
