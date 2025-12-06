@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\DependencyInjection\FrameworkExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
+use Symfony\Component\HttpKernel\Kernel;
 use function assert;
 use function interface_exists;
 use function sys_get_temp_dir;
@@ -74,10 +75,9 @@ class IdGeneratorPassTest extends TestCase
         $extension->load([
             'framework' => [
                 'http_method_override' => false,
-                'annotations' => ['enabled' => false],
                 'php_errors' => ['log' => true],
                 'handle_all_throwables' => true,
-            ],
+            ]  + (version_compare(Kernel::VERSION, '7.0.0', '<') ? ['annotations' => false] : []),
         ], $container);
 
         $extension = new DoctrineExtension();

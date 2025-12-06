@@ -46,10 +46,9 @@ class TestKernel extends Kernel
             $container->loadFromExtension('framework', [
                 'secret' => 'F00',
                 'http_method_override' => false,
-                'annotations' => false,
                 'php_errors' => ['log' => true],
                 'handle_all_throwables' => true,
-            ]);
+            ] + (version_compare(Kernel::VERSION, '7.0.0', '<') ? ['annotations' => false] : []));
             /** @phpstan-ignore function.alreadyNarrowedType */
             $enableNativeLazyObjects = PHP_VERSION_ID >= 80400 && method_exists(Configuration::class, 'enableNativeLazyObjects');
             $container->loadFromExtension('doctrine', [
